@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login page</title>
+        <style>
+            body {
+                width: 100%;
+                display: grid;
+                place-items: center;
+            }
+            section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                padding-top: 100px;
+            }
+            form {
+                display: flex;
+                width: 100%;
+                max-width: 300px;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 40px 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgb(157, 65, 243);
+            }
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                width: 100%;
+            }
+            input {
+                width: 100%;
+                padding: 10px 5px;
+                border-radius: 6px;
+                border: 2px solid rgb(157, 65, 243);
+
+            }
+            button {
+                padding: 10px 30px;
+                background-color: rgb(157, 65, 243);
+                color: white;
+                outline: 0;
+                border: 0;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <section>
+            
+
+            <form id="loginForm">
+                <h1>
+                    Login Page
+                </h1>
+                <div class="form-group">
+                    <label>
+                        Username
+                    </label>
+                    <input type="text" placeholder="username" name="username" id="username" required>    
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        password
+                    </label>
+                    <input type="password" placeholder="password" name="password" id="password" required>    
+                </div>
+      
+                <button id="loginbtn" type="submit">
+                    Login
+                </button>
+            </form>
+        </section>
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (!username && !password){
+                    return
+                }
+
+                const loginbtn = document.getElementById('loginbtn')
+    
+                // Send a request to your API to authenticate the user and obtain a token
+                fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("logged in")
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        console.log("couldnit login")
+                        throw new Error('Login failed.'); // Throw error for failed login
+                    }
+                })
+                .then(data => {
+                    localStorage.setItem('token', data.token); // Store token in localStorage
+                    window.location.href = `/addgame`; // Redirect to games add page on successful login
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Login failed. Please try again.'); // Show error message to the user
+                });
+            });
+        </script>
+    </body>
+</html>

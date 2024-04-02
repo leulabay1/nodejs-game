@@ -1,0 +1,32 @@
+{
+  "name": "memory-game",
+  "version": "1.0.0",
+  "description": "A memory game",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leulabay1/nodejs-game.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Leul Ejigu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leulabay1/nodejs-game/issues"
+  },
+  "homepage": "https://github.com/leulabay1/nodejs-game#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  }
+}

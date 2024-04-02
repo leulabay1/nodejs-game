@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Games</title>
+        <style>
+            body {
+                width: 100%;
+                display: grid;
+                place-items: center;
+            }
+            section {
+                gap: 20px;
+                width: 90%;
+                padding-top: 50px;
+                display: grid;
+                place-items: center;
+            }
+            #cards-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 20px;
+                width: 100%;
+            }
+            #error-container {
+                width: 100%;
+                display: grid;
+                place-items: center;
+                color: rgb(246, 66, 66);
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 10%;
+            }
+            #success-container {
+                width: 100%;
+                display: grid;
+                place-items: center;
+                color: rgb(37, 164, 37);
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 10%;
+            }
+            .cardContainer {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px 30px;
+                justify-content: center;
+                border: 1.5px solid rgb(157, 65, 243);
+                border-radius: 5px;
+            }
+
+            .cardContainer button {
+                padding: 5px 10px;
+                outline: 0;
+                border: 0;
+                border-radius: 5px;
+                background-color: rgb(246, 47, 44);
+                color: white;
+            }
+            nav {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                width: 100%;
+            }
+            nav ul {
+                list-style-type: none;
+                display: flex;
+                gap: 10px;
+            }
+
+            nav ul li a {
+                text-decoration: none;
+
+            }
+            .active {
+                color: rgb(157, 65, 243);
+            }
+            button {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <nav>
+                <div>
+                    Memory Games
+                </div>
+
+                <ul>
+                    <li>
+                        <a href="http://localhost:3000/addgame">
+                            Create A Game
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="http://localhost:3000/games" class="active">
+                            View Games
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div id="error-container">
+
+            </div>
+
+            <div id="success-container">
+
+            </div>
+
+            <h1>
+                These are the list of available games
+            </h1>
+            <div id="cards-container">
+
+            </div>
+        </section>
+
+        <script>
+
+            const checkAuth = function (){
+                const section = document.getElementById('cards-container')
+                section.style.display = 'none'
+                const token = localStorage.getItem('token'); // Get token from localStorage
+
+                if (!token) {
+                    console.log('couldnt find token')
+                    window.location.href = '/login'; // Redirect to login page if token is missing
+                } else {
+                    // Send a request to your API to validate the token
+                    fetch('http://localhost:3000/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            section.style.display = 'flex'
+                        } else {
+                            console.error('Token validation failed.');
+                            localStorage.removeItem('token'); // Remove invalid token from localStorage
+                            window.location.href = '/login'; // Redirect to login page on token validation failure
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error validating token:', error);
+                        localStorage.removeItem('token'); // Remove invalid token from localStorage
+                        window.location.href = '/login'; // Redirect to login page on error
+                    });
+                }
+            }
+
+            checkAuth()
+            
+            const showError = function (text) {
+                const errorContainer = document.getElementById('error-container')
+                errorContainer.innerText = ''
+                errorContainer.innerText = text
+                errorContainer.style.display = 'grid'
+                setTimeout(()=>{
+                    errorContainer.style.display = 'none'
+                }, 10000)
+            }
+
+            const showSuccess = function (text) {
+                const errorContainer = document.getElementById('success-container')
+                errorContainer.innerText = ''
+                errorContainer.innerText = text
+                errorContainer.style.display = 'grid'
+                setTimeout(()=>{
+                    errorContainer.style.display = 'none'
+                }, 10000)
+            }
+
+            const handleDelete = function (event) {
+
+                // Send a request to your API to create the game
+                fetch('http://localhost:3000/game/' + this.dataset.gamename, 
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Game deleted successfully!\nwait for page reloads');
+                    setTimeout(()=>{
+                        window.location.href = '/games'
+                    }, 1200)
+                })
+                .catch(error => {
+                    showError("Game couldn't be deleted!")
+                });
+            }
+
+            const createCard = function (game) {
+                const cardContainer = document.createElement('div')
+                const name = document.createElement('span')
+                const number = document.createElement('span')
+                const gameUrl = document.createElement('span')
+                const deleteBtn = document.createElement('button')
+
+                cardContainer.classList.add('cardContainer')
+                name.innerText = 'Game Name: ' + game.name
+                number.innerText = 'Number of images: ' + game.numberOfImages
+                gameUrl.innerText = "Url: " + game.url
+                deleteBtn.dataset.gamename = game.name
+                deleteBtn.innerText = 'Delete'
+                deleteBtn.addEventListener('click', handleDelete)
+
+                cardContainer.appendChild(name);
+                cardContainer.appendChild(number);
+                cardContainer.appendChild(gameUrl)
+                cardContainer.appendChild(deleteBtn);
+
+                return cardContainer
+            }
+
+        </script>
+    </body>
+</html>

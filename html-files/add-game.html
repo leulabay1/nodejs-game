@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Game</title>
+        <style>
+            body {
+                width: 100%;
+                display: grid;
+                place-items: center;
+            }
+            section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                padding-top: 50px;
+            }
+            form {
+                display: flex;
+                width: 100%;
+                max-width: 300px;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 40px 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgb(157, 65, 243);
+            }
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                width: 100%;
+            }
+            input {
+                width: 100%;
+                padding: 10px 5px;
+                border-radius: 6px;
+                border: 2px solid rgb(157, 65, 243);
+
+            }
+            button {
+                padding: 10px 30px;
+                background-color: rgb(157, 65, 243);
+                color: white;
+                outline: 0;
+                border: 0;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            #number-image {
+                display: flex;
+                gap: 4px;
+                justify-content: center;
+            }
+            #number-image span {
+                padding: 5px 10px;
+                border-radius: 5px;
+                background-color: rgb(157, 65, 243, 0.5);
+            } 
+            #error-container {
+                width: 100%;
+                display: grid;
+                place-items: center;
+                color: rgb(246, 66, 66);
+            }
+            #success-container {
+                width: 100%;
+                display: grid;
+                place-items: center;
+                color: rgb(37, 164, 37);
+            }
+            nav {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                width: 100%;
+            }
+            nav ul {
+                list-style-type: none;
+                display: flex;
+                gap: 10px;
+            }
+
+            nav ul li a {
+                text-decoration: none;
+
+            }
+            .active {
+                color: rgb(157, 65, 243);
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <nav>
+                <div>
+                    Memory Games
+                </div>
+
+                <ul>
+                    <li>
+                        <a href="http://localhost:3000/addgame" class="active" >
+                            Create A Game
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="http://localhost:3000/games" >
+                            View Games
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <form id="createForm">
+                <h1>
+                    Create A Game
+                </h1>
+                <div class="form-group">
+                    <label for="gameTitle">Game name:</label>
+                    <input type="text" id="gameTitle" name="gameTitle" required>    
+                </div>
+           
+                <div class="form-group">
+                    <label for="images">Images: svgs only</label>
+                    <input type="file" id="images" name="images" accept="image/svg+xml" multiple required>    
+                </div>
+
+                <button>
+                    Create Game
+                </button>
+
+                <div id="error-container">
+
+                </div>
+
+                <div id="success-container">
+
+                </div>
+            </form>
+        </section>
+
+        <script>
+
+            const checkAuth = function (){
+                const form = document.getElementById('createForm')
+                form.style.display = 'none'
+                const token = localStorage.getItem('token'); // Get token from localStorage
+
+                if (!token) {
+                    console.log('couldnt find token')
+                    window.location.href = '/login'; // Redirect to login page if token is missing
+                } else {
+                    // Send a request to your API to validate the token
+                    fetch('http://localhost:3000/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            form.style.display = 'flex'
+                        } else {
+                            console.error('Token validation failed.');
+                            localStorage.removeItem('token'); // Remove invalid token from localStorage
+                            window.location.href = '/login'; // Redirect to login page on token validation failure
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error validating token:', error);
+                        localStorage.removeItem('token'); // Remove invalid token from localStorage
+                        window.location.href = '/login'; // Redirect to login page on error
+                    });
+                }
+            }
+
+            checkAuth()
+
+            function closestLowerOrEqualNumber(target) {
+                let closest = -Infinity;
+                arr = [2, 3, 4, 6, 8, 10, 12, 15]
+            
+                for (const num of arr) {
+                    if (num <= target && num > closest) {
+                        closest = num;
+                    }
+                }
+            
+                return closest;
+            }
+            
+            const showError = function (text) {
+                const errorContainer = document.getElementById('error-container')
+                errorContainer.innerText = ''
+                errorContainer.innerText = text
+                errorContainer.style.display = 'grid'
+                setTimeout(()=>{
+                    errorContainer.style.display = 'none'
+                }, 10000)
+            }
+
+            const showSuccess = function (text) {
+                const errorContainer = document.getElementById('success-container')
+                errorContainer.innerText = ''
+                errorContainer.innerText = text
+                errorContainer.style.display = 'grid'
+                setTimeout(()=>{
+                    errorContainer.style.display = 'none'
+                }, 10000)
+            }
+
+            document.getElementById('createForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+    
+                const formData = new FormData();
+                const gameTitle = document.getElementById('gameTitle').value;
+                const imagesInput = document.getElementById('images');
+
+                if (
+                    Object.entries(imagesInput.files).length < 2
+                ) {
+                    showError(`Selecting less than two images is not allowed.\nplease select more than one image!`)
+                    return
+                }
+
+                if (gameTitle.length < 1){
+                    showError(`please add a name for your game.\nplease select valid number of images!`)
+                }
+                
+                formData.append('name', gameTitle);
+
+                const files = imagesInput.files
+    
+                for (let i = 0; i < closestLowerOrEqualNumber(files.length); i++) {
+                    formData.append('images', files[i]);
+                }
+    
+                // Send a request to your API to create the game
+                fetch('http://localhost:3000/game', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess(`Game created successfully!\n with url ${data.url}`);
+                })
+                .catch(error => {
+                    showError("Game couldn't be created!")
+                });
+            });
+        </script>
+    </body>
+</html>
