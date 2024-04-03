@@ -151,12 +151,14 @@ app.get("/memory/:gameName", (req, res) => {
 
       const shuffleAndMakeGrid = function (currentImageNodes){
         newImgNodes = shuffle(currentImageNodes)
+        currentImageNodes = newImgNodes
+        
         newImgNodes.forEach((imgNode)=>{
           imgNode.firstChild.classList.remove('matched')
           imgNode.firstChild.classList.add('unmatched')
         })
         gridContainer.innerHTML = ''
-        gridContainer.style.gridTemplateColumns = 'repeat(' + imageGridSize[gameNumbers[currentGameNumberIdx]] + ', 1fr)'
+        gridContainer.style.gridTemplateColumns = 'repeat(' + imageGridSize[gameNumbers[currentGameNumberIdx]] + ', 10%)'
         replayContainer.style.display = 'none';
         playContainer.style.display = 'none';
         gridContainer.appendChild(playContainer)
@@ -217,6 +219,8 @@ app.get("/memory/:gameName", (req, res) => {
       })
 
       const gridContainer = document.getElementById('gridContainer')
+
+      let currentImageNodes;
 
       shuffleAndMakeGrid(imgNodes.slice(0, gameNumbers[currentGameNumberIdx] * 2))
 
