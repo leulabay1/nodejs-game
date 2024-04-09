@@ -3,18 +3,12 @@
     "name": "numbers",
     "backgroundImage": "default-background.svg",
     "cardBackgroundImage": "default-card-background.svg",
-    "counterColor": "#ffffff",
+    "counterColor": "#cfc9c9",
     "images": [
-      "1712645442593-fifty-svgrepo-com.svg",
-      "1712645444918-thirty-svgrepo-com.svg",
-      "1712645443057-forty-svgrepo-com.svg",
-      "1712645444581-ninety-svgrepo-com.svg",
-      "1712645444562-eight-svgrepo-com.svg",
-      "1712645449874-four-svgrepo-com.svg",
-      "1712645449780-one-svgrepo-com.svg",
-      "1712645445325-six-svgrepo-com.svg",
-      "1712645445504-three-svgrepo-com.svg",
-      "1712645445706-two-svgrepo-com.svg"
+      "1712648909819-fifty-svgrepo-com.svg",
+      "1712648912666-thirty-svgrepo-com.svg",
+      "1712648914509-forty-svgrepo-com.svg",
+      "1712648914237-ninety-svgrepo-com.svg"
     ]
   }
 }

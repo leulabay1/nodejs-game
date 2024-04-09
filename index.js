@@ -151,7 +151,7 @@ app.get("/memory/:gameName", (req, res) => {
               if (numberOfMatches === gameNumbers[currentGameNumberIdx] && gameNumbers[currentGameNumberIdx] === Math.floor(imgNodes.length/2)){
                 clearInterval(timer)
                 replayContainer.style.display = 'flex';
-                result.innerText = 'Congratulations! You have won the game in ' + timePlayed.innerText + '!';
+                result.innerText = 'Wow!' + ${JSON.stringify("\n")} + 'Score: ' + timePlayed.innerText;
                 timePlayed.innerText = '00:00:00'
 
               } else if (numberOfMatches === gameNumbers[currentGameNumberIdx]){

@@ -99,19 +99,56 @@
       max-width: 600px;
       text-align: center;
   }
-  #play, #replay, #continue {
-      padding: 10px 20px;
-      background-color: rgb(129, 21, 176);
-      color: white;
-      font-size: 1.5rem;
-      border: solid white 2px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: transform 0.3s;
+  /* CSS */
+  .button-3 {
+    appearance: none;
+    background-color: #2ea44f;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 6px;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 10px 25px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
   }
-  #play:hover, #replay:hover {
-      background-color: rgb(157, 65, 243);
-      transform: scale(1.1);
+
+  .button-3:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+  }
+
+  .button-3:hover {
+    background-color: #2c974b;
+  }
+
+  .button-3:focus {
+    box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+    outline: none;
+  }
+
+  .button-3:disabled {
+    background-color: #94d3a2;
+    border-color: rgba(27, 31, 35, .1);
+    color: rgba(255, 255, 255, .8);
+    cursor: default;
+  }
+
+  .button-3:active {
+    background-color: #298e46;
+    box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
   }
   #time-played-container {
       width: 96%;
@@ -157,14 +194,14 @@
   <section id="gameContainer">
     <div id="gridContainer">
       <div id="play-container">
-        <button id="play">PLAY</button>
+        <button id="play" class="button-3">START</button>
       </div>
       <div id="replay-container">
         <h1 id="result"></h1>
-        <button id="replay">REPLAY</button>
+        <button id="replay" class="button-3">START</button>
       </div>
       <div id="continue-container">
-        <button id="continue">Continue</button>
+        <button id="continue" class="button-3">GO</button>
       </div>
     </div>
     <div id="time-played-container">
