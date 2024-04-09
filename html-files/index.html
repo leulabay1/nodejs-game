@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Game Information</title>
+  <title>Game 12345678</title>
   <style>
     body {
-      background-color: #f0f0f0;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
@@ -14,12 +13,16 @@
       height: 100vh;
   }
 
-  section {
+  section#gameContainer {
       width: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 5px;
       align-items: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
   }
   
   #gridContainer {
@@ -28,6 +31,7 @@
       place-content: center;
       width: 96%;
       max-width: 800px;
+      aspect-ratio: 4 / 3;
       position: relative;
       gap: clamp(5px, 2%, 10px);
       padding: clamp(5px, 2%, 10px);
@@ -51,9 +55,6 @@
   .imgContainer img, .imgContainer div{
     transition: transform 0.6s;
     transform-style: preserve-3d;
-  }
-
-  .imgContainer div {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
@@ -72,11 +73,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgb(157, 65, 243);
+      background-color: transparent;
       z-index: 10;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
   }
   
-  #play-container, #replay-container {
+  #play-container, #replay-container, #continue-container {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -95,7 +99,7 @@
       max-width: 600px;
       text-align: center;
   }
-  #play, #replay {
+  #play, #replay, #continue {
       padding: 10px 20px;
       background-color: rgb(129, 21, 176);
       color: white;
@@ -111,23 +115,46 @@
   }
   #time-played-container {
       width: 96%;
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       max-width: 800px;
+      place-items: center;
+  }
+  #time-played-container div {
+      width: 100%;
+      place-content: left;
+      padding-left: 20px;
+  }
+  #time-played-container div svg {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
   }
   #time-played {
-      padding: 10px 20px;
-      border: solid black 2px;
-      border-radius: 10px;
+      padding: 5px 5px;
       font-size: 1.5rem;
-      color: rgb(129, 21, 176);
+      color: black;
+  }
+
+  .taken {
+    animation: disapear 1s forwards;
+  }
+
+  @keyframes disapear {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(0);
+    }
   }
   </style>
 </head>
 <body>
-  <section>
-    <div id="time-played-container">
-      <p id="time-played"></p>
-    </div>
+  <section id="gameContainer">
     <div id="gridContainer">
       <div id="play-container">
         <button id="play">PLAY</button>
@@ -136,6 +163,23 @@
         <h1 id="result"></h1>
         <button id="replay">REPLAY</button>
       </div>
+      <div id="continue-container">
+        <button id="continue">Continue</button>
+      </div>
+    </div>
+    <div id="time-played-container">
+      <div id="music-toogle-container">
+        <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.5 6.8935V5.57661C12.5 5.36926 12.5 5.26559 12.5347 5.17738C12.5653 5.09948 12.615 5.03052 12.6792 4.97682C12.752 4.91601 12.8503 4.88323 13.047 4.81766L17.447 3.35099C17.8025 3.23249 17.9803 3.17324 18.1218 3.20877C18.2456 3.23987 18.3529 3.31718 18.4216 3.42484C18.5 3.54783 18.5 3.7352 18.5 4.10994V7.42339C18.5 7.63074 18.5 7.73441 18.4653 7.82262C18.4347 7.90052 18.385 7.96948 18.3208 8.02318C18.248 8.08399 18.1497 8.11677 17.953 8.18234L14.8192 9.22692M12.5 12.5V18.5M12.5 18.5C12.5 19.8807 10.933 21 9 21C7.067 21 5.5 19.8807 5.5 18.5C5.5 17.1193 7.067 16 9 16C10.933 16 12.5 17.1193 12.5 18.5ZM3 3L21 21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.5 8.89001V18.5M12.5 8.89001V5.57656C12.5 5.36922 12.5 5.26554 12.5347 5.17733C12.5653 5.09943 12.615 5.03047 12.6792 4.97678C12.752 4.91597 12.8503 4.88318 13.047 4.81761L17.447 3.35095C17.8025 3.23245 17.9803 3.17319 18.1218 3.20872C18.2456 3.23982 18.3529 3.31713 18.4216 3.42479C18.5 3.54779 18.5 3.73516 18.5 4.10989V7.42335C18.5 7.63069 18.5 7.73436 18.4653 7.82258C18.4347 7.90048 18.385 7.96943 18.3208 8.02313C18.248 8.08394 18.1497 8.11672 17.953 8.18229L13.553 9.64896C13.1975 9.76746 13.0197 9.82671 12.8782 9.79119C12.7544 9.76009 12.6471 9.68278 12.5784 9.57512C12.5 9.45212 12.5 9.26475 12.5 8.89001ZM12.5 18.5C12.5 19.8807 10.933 21 9 21C7.067 21 5.5 19.8807 5.5 18.5C5.5 17.1192 7.067 16 9 16C10.933 16 12.5 17.1192 12.5 18.5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+      </div>
+      <p id="time-played"></p>
+      <span></span>
     </div>
   </section>
 </body>

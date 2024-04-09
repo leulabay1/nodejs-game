@@ -4,9 +4,14 @@
         <title>Games</title>
         <style>
             body {
+                display: flex;
+                justify-items: center;
+                align-items: start;
+                position: relative;
+                min-height: 96vh;
                 width: 100%;
-                display: grid;
-                place-items: center;
+                padding: 0;
+                margin: 0;
             }
             section {
                 gap: 20px;
@@ -14,34 +19,44 @@
                 padding-top: 50px;
                 display: grid;
                 place-items: center;
+                place-self: top center;
             }
             #cards-container {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
                 gap: 20px;
                 width: 100%;
+                place-items: center;
             }
             #error-container {
-                width: 100%;
-                display: grid;
+                width: fit-content;
+                padding: 20px 40px;
+                display: none;
                 place-items: center;
                 color: rgb(246, 66, 66);
                 position: fixed;
+                z-index: 100;
                 left: 50%;
+                border-radius: 10px;
                 transform: translateX(-50%);
                 top: 10%;
+                background-color: white;
+                filter: drop-shadow(0 0 10px black);
             }
             #success-container {
-                width: 100%;
-                display: grid;
+                width: fit-content;
+                padding: 20px 40px;
+                display: none;
+                border-radius: 10px;
                 place-items: center;
                 color: rgb(37, 164, 37);
                 position: fixed;
+                z-index: 100;
                 left: 50%;
                 transform: translateX(-50%);
                 top: 10%;
+                background-color: white;
+                filter: drop-shadow(0 0 5px black);
             }
             .cardContainer {
                 display: flex;
@@ -52,14 +67,29 @@
                 border: 1.5px solid rgb(157, 65, 243);
                 border-radius: 5px;
             }
-
-            .cardContainer button {
+            .cardContainer div {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                gap: 5px;
+            }
+            .cardContainer button:first-child {
                 padding: 5px 10px;
                 outline: 0;
                 border: 0;
                 border-radius: 5px;
-                background-color: rgb(246, 47, 44);
+                background-color: rgb(15, 94, 251);
                 color: white;
+                width: 100%;
+            }
+            .cardContainer button:nth-child(2) {
+                padding: 5px 10px;
+                outline: 0;
+                border: 0;
+                border-radius: 5px;
+                background-color: rgb(239, 24, 24);
+                color: white;
+                width: 100%;
             }
             nav {
                 display: flex;
@@ -78,12 +108,107 @@
                 text-decoration: none;
 
             }
+            input {
+                width: 80%;
+                padding: 10px 5px;
+                border-radius: 6px;
+                border: 2px solid rgb(157, 65, 243);
+
+            }
+            button {
+                padding: 10px 30px;
+                background-color: rgb(157, 65, 243);
+                color: white;
+                outline: 0;
+                border: 0;
+                border-radius: 5px;
+                cursor: pointer;
+                width: fit-content;
+            }
             .active {
                 color: rgb(157, 65, 243);
             }
             button {
                 cursor: pointer;
             }
+            #editFormContainer {
+                position: absolute;
+                display: none;
+                top: 0;
+                place-items: center;
+                width: 100%;
+                height: 94vh;
+                background-color: rgba(0, 0, 0, 0.388);
+                overflow-y: scroll;
+                margin: 0;
+                padding: 20px 0;
+            }
+
+            #editForm {
+                background-color: white;
+                width: 100%;
+                max-width: 600px;
+                display: flex;
+                flex-direction: column;
+                padding: 20px 30px;
+                box-shadow: 0 0 10px black;
+                border-radius: 10px;
+                gap: 30px;
+            }
+            .form-group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border: solid 1px black;
+                border-radius: 10px;
+                padding: 10px 10px;
+            }
+            #images-container {
+                border: solid 1px black;
+                padding: 10px 10px;
+                border-radius: 5px;
+                display: flex;
+                overflow-x: scroll;
+                width: 90%;
+                gap: 15px;
+            }
+            #images-container img {
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
+            #editForm img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .selectedImage {
+                filter: drop-shadow(0 0 5px rgb(0, 0, 0));
+                transform: scale(1.1);
+            }
+            #counter-color {
+                padding: 5px;
+                height: 40px;
+                width: 40px;
+            }
+            #closeBtn {
+                background-color: red;
+                color: white;
+                border-radius: 15px;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+            }
+            .editFormHeader {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
         </style>
     </head>
     <body>
@@ -121,7 +246,80 @@
             <div id="cards-container">
 
             </div>
+
         </section>
+
+        <div id="editFormContainer">
+            <div id="editForm">
+                <div class="editFormHeader">
+                    <h1>
+                        Edit Game Info
+                    </h1>
+                    <button id="closeBtn">
+                        X
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameTitle">Game name:</label>
+                    <input type="text" id="gameTitle" name="gameTitle" required> 
+                    <button id="save-name">
+                        Save Name
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label>Select images to delete</label>
+                    <div id="images-container">
+                    </div>
+                    <button id="delete-images">
+                        Delete Selected Images
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="card-background-image">Card Background Image</label>
+                    <input type="file" id="card-background-image" name="cardBackgroundImage" accept="image/svg+xml" required>
+                    <img id="card-background-image-value" alt="card background image">
+                    <button id="save-card-background">
+                        Save card background Image
+                     </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="background-image">Game Background Image</label>
+                    <input type="file" id="background-image" name="background-image" accept="image/svg+xml" required>
+                    <img id="background-image-value" lt="background image">
+                    <button id="save-background">
+                        Save Background Image
+                     </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="counter-color">Edit Counter Color</label>
+                    <input type="color" id="counter-color" name="counter-color" required>
+                    <button id="save-counter">
+                        Save counter color
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="add-image-input">Add Images: svgs only</label>
+                    <input type="file" id="add-image-input" name="add-image-input" accept="image/svg+xml" multiple required>    
+                    <button id="save-added-images">
+                        Save Added Images
+                    </button>
+                </div>
+
+                <div id="error-container">
+
+                </div>
+
+                <div id="success-container">
+
+                </div>
+            </div>
+        </div>
 
         <script>
 
@@ -144,7 +342,7 @@
                     })
                     .then(response => {
                         if (response.ok) {
-                            section.style.display = 'flex'
+                            section.style.display = 'grid'
                         } else {
                             console.error('Token validation failed.');
                             localStorage.removeItem('token'); // Remove invalid token from localStorage
@@ -168,7 +366,7 @@
                 errorContainer.style.display = 'grid'
                 setTimeout(()=>{
                     errorContainer.style.display = 'none'
-                }, 10000)
+                }, 7000)
             }
 
             const showSuccess = function (text) {
@@ -178,7 +376,7 @@
                 errorContainer.style.display = 'grid'
                 setTimeout(()=>{
                     errorContainer.style.display = 'none'
-                }, 10000)
+                }, 7000)
             }
 
             const handleDelete = function (event) {
@@ -211,28 +409,352 @@
                 });
             }
 
+            const handleEdit = function (event) {
+                let game = JSON.parse(this.dataset.game);
+                currentGame = game;
+
+                const editFormContainer = document.getElementById('editFormContainer');
+                editFormContainer.style.display = 'grid';
+
+                const closeBtn = document.getElementById('closeBtn');
+                closeBtn.addEventListener('click', ()=> {
+                    editFormContainer.style.display = 'none';
+                    window.location.href = '/games'
+                })
+
+                const gameName = document.getElementById('gameTitle');
+                const saveNameBtn = document.getElementById('save-name');
+                saveNameBtn.addEventListener('click', handleSaveName);
+
+                const deleteBtn = document.getElementById('delete-images');
+                deleteBtn.addEventListener('click', handleDeleteImages)
+
+                const cardBackgroundImage = document.getElementById('card-background-image');
+                const saveCardBackgroundImage = document.getElementById('save-card-background');
+                saveCardBackgroundImage.addEventListener('click', handleCardBackgroundImageSave);
+                const cardBackgroundImageValue = document.getElementById('card-background-image-value');
+                cardBackgroundImage.addEventListener('change', handleCardBackgroundImage)
+
+                const backgroundImage = document.getElementById('background-image');
+                const saveBackgroundImage = document.getElementById('save-background');
+                saveBackgroundImage.addEventListener('click', handleBackgroundImageSave);
+                const backgroundImageValue = document.getElementById('background-image-value');
+                backgroundImage.addEventListener('change', handleBackgroundImage)
+
+                const counterColor = document.getElementById('counter-color');
+                const saveCounterColor = document.getElementById('save-counter');
+                saveCounterColor.addEventListener('click', handleCounterColor);
+
+                const addImageInput = document.getElementById('add-image-input');
+                const addImageBtn = document.getElementById('save-added-images');
+                addImageBtn.addEventListener('click', handleAddImages);
+
+                gameName.value = game.name
+                game.images.forEach((image)=>{
+                    let img = document.createElement('img');
+                    img.setAttribute('src', 'http://localhost:3000/' + image);
+                    img.dataset.imageUrl = image;
+                    img.addEventListener('click', selectImage)
+                    imageContainer.appendChild(img)
+                })
+
+                cardBackgroundImageValue.setAttribute('src', 'http://localhost:3000/' + game.cardBackgroundImage);
+                backgroundImageValue.setAttribute('src','http://localhost:3000/' + game.backgroundImage);
+
+                counterColor.value = game.counterColor;
+            }
+
+            const selectImage = function (event) {
+                if (selectedImages.includes(this.dataset.imageUrl)){
+                    let idx = selectedImages.indexOf(this.dataset.imageUrl);
+                    if (idx > -1) {
+                        selectedImages.splice(idx, 1);
+                    }
+                    this.classList.remove('selectedImage')
+                } else {
+                    selectedImages.push(this.dataset.imageUrl)
+                    this.classList.add('selectedImage')
+                }
+            }
+
+            const handleCounterColor = function (event) {
+                const counterColor = document.getElementById('counter-color').value;
+                fetch(`http://localhost:3000/game/counter/${currentGame.name}` , 
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(
+                            {
+                                counterColor: counterColor
+                            }
+                        )
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Counter color updated successfully!');
+                })
+                .catch(error => {
+                    showError("Counter color couldn't be updated!")
+                });
+            }
+
+            const handleCardBackgroundImage = function (event) {
+                const cardBackgroundImage = document.getElementById('card-background-image').files[0];
+                const cardBackgroundImageValue = document.getElementById('card-background-image-value');
+                cardBackgroundImageValue.setAttribute('src', URL.createObjectURL(cardBackgroundImage));
+            }
+
+            const handleBackgroundImage = function (event) {
+                const backgroundImage = document.getElementById('background-image').files[0];
+                const backgroundImageValue = document.getElementById('background-image-value');
+                backgroundImageValue.setAttribute('src', URL.createObjectURL(backgroundImage));
+            }
+
+            const handleCardBackgroundImageSave = function (event) {
+                const image = document.getElementById('card-background-image').files[0];
+                
+                if (!image) {
+                    showError('please select an image!')
+                    return
+                }
+                
+                const formData = new FormData();
+
+                formData.append('image', image);
+
+                fetch(`http://localhost:3000/game/cardbackground/${currentGame.name}`, 
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: formData
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Image added successfully!');
+                })
+                .catch(error => {
+                    showError("Image couldn't be added!")
+                });
+            }
+
+            const handleBackgroundImageSave = function (event) {
+                const image = document.getElementById('background-image').files[0];
+                
+                if (!image) {
+                    showError('please select an image!')
+                    return
+                }
+
+                const formData = new FormData();
+
+                formData.append('image', image);
+
+                fetch(`http://localhost:3000/game/background/${currentGame.name}`, 
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: formData
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Image added successfully!');
+                })
+                .catch(error => {
+                    showError("Image couldn't be added!")
+                });
+            }
+
+            const handleSaveName = function (event) {
+                const gameName = document.getElementById('gameTitle').value;
+                fetch(`http://localhost:3000/game/name/${currentGame.name}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(
+                            {
+                                name: gameName
+                            }
+                        )
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Game name updated successfully!');
+                    currentGame = data.game
+                })
+                .catch(error => {
+                    showError("Game name couldn't be updated!")
+                });
+            }
+
+            const handleAddImages = function (event) {
+                const images = document.getElementById('add-image-input').files;
+
+                if (images.length === 0) {
+                    showError("You must select an image!")
+                    return
+                }
+
+                const formData = new FormData();
+                for (let i = 0; i < images.length; i++) {
+                    formData.append('images', images[i]);
+                }
+
+                fetch(`http://localhost:3000/game/images/${currentGame.name}`, 
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: formData
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Images added successfully!');
+                    imageContainer.innerHTML = ''
+                    data.images.forEach((image)=>{
+                        let img = document.createElement('img');
+                        img.setAttribute('src', 'http://localhost:3000/' + image);
+                        img.dataset.imageUrl = image;
+                        img.addEventListener('click', selectImage)
+                        imageContainer.appendChild(img)
+                    })
+                    document.getElementById('add-image-input').value = null
+
+                })
+                .catch(error => {
+                    showError("Images couldn't be added!")
+                });
+            }
+
+            const handleDeleteImages = function (event) {
+                if (selectedImages.length === 0) {
+                    showError("please select images to delete")
+                    return
+                }
+
+                fetch(`http://localhost:3000/game/deleteimages/${currentGame.name}`, 
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(
+                            {
+                                images: selectedImages
+                            }
+                        )
+                    }
+                )
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response data as JSON
+                    } else {
+                        throw new Error('Error creating game.'); // Throw error for failed game creation
+                    }
+                })
+                .then(data => {
+                    showSuccess('Images deleted successfully!');
+                    imageContainer.innerHTML = ''
+                    data.images.forEach((image)=>{
+                        let img = document.createElement('img');
+                        img.setAttribute('src', 'http://localhost:3000/' + image);
+                        img.dataset.imageUrl = image;
+                        img.addEventListener('click', selectImage)
+                        imageContainer.appendChild(img)
+                    })
+                    selectedImages = []
+                })
+                .catch(error => {
+                    showError("Images couldn't be deleted!")
+                });
+
+
+            }
+
             const createCard = function (game) {
                 const cardContainer = document.createElement('div')
                 const name = document.createElement('span')
                 const number = document.createElement('span')
                 const gameUrl = document.createElement('span')
+                const gameAnchore = document.createElement('a')
                 const deleteBtn = document.createElement('button')
+                const editBtn = document.createElement('button')
+                const btnContainer = document.createElement('div')
 
                 cardContainer.classList.add('cardContainer')
                 name.innerText = 'Game Name: ' + game.name
                 number.innerText = 'Number of images: ' + game.numberOfImages
-                gameUrl.innerText = "Url: " + game.url
+                gameUrl.innerText = "Url: "
+                gameAnchore.setAttribute('href', game.url)
+                gameAnchore.innerText = 'link'
+                gameUrl.append(gameAnchore)
                 deleteBtn.dataset.gamename = game.name
                 deleteBtn.innerText = 'Delete'
                 deleteBtn.addEventListener('click', handleDelete)
+                editBtn.dataset.game = JSON.stringify(game)
+                editBtn.innerText = 'Edit'
+                editBtn.addEventListener('click', handleEdit)
+                btnContainer.appendChild(editBtn)
+                btnContainer.appendChild(deleteBtn)
 
                 cardContainer.appendChild(name);
                 cardContainer.appendChild(number);
                 cardContainer.appendChild(gameUrl)
-                cardContainer.appendChild(deleteBtn);
+                cardContainer.appendChild(btnContainer);
 
                 return cardContainer
             }
+
+            var selectedImages = []
+            const imageContainer = document.getElementById('images-container');
+
+            var currentGame = null;
 
         </script>
     </body>

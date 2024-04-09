@@ -1,18 +1,20 @@
 {
-  "numbers": [
-    "1711806400175-fifty-svgrepo-com.svg",
-    "1711806409385-thirty-svgrepo-com.svg",
-    "1711806408485-forty-svgrepo-com.svg",
-    "1711806408490-ninety-svgrepo-com.svg",
-    "1711806409232-eight-svgrepo-com.svg",
-    "1711806402862-four-svgrepo-com.svg",
-    "1711806406883-one-svgrepo-com.svg",
-    "1711806406574-six-svgrepo-com.svg",
-    "1711806400461-three-svgrepo-com.svg",
-    "1711806408684-two-svgrepo-com.svg"
-  ],
-  "test": [
-    "1711807540357-fifty-svgrepo-com.svg",
-    "1711807533800-thirty-svgrepo-com.svg"
-  ]
+  "numbers": {
+    "name": "numbers",
+    "backgroundImage": "default-background.svg",
+    "cardBackgroundImage": "default-card-background.svg",
+    "counterColor": "#ffffff",
+    "images": [
+      "1712645442593-fifty-svgrepo-com.svg",
+      "1712645444918-thirty-svgrepo-com.svg",
+      "1712645443057-forty-svgrepo-com.svg",
+      "1712645444581-ninety-svgrepo-com.svg",
+      "1712645444562-eight-svgrepo-com.svg",
+      "1712645449874-four-svgrepo-com.svg",
+      "1712645449780-one-svgrepo-com.svg",
+      "1712645445325-six-svgrepo-com.svg",
+      "1712645445504-three-svgrepo-com.svg",
+      "1712645445706-two-svgrepo-com.svg"
+    ]
+  }
 }
