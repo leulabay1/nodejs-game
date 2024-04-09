@@ -1,14 +1,2 @@
 {
-  "numbers": {
-    "name": "numbers",
-    "backgroundImage": "default-background.svg",
-    "cardBackgroundImage": "default-card-background.svg",
-    "counterColor": "#cfc9c9",
-    "images": [
-      "1712648909819-fifty-svgrepo-com.svg",
-      "1712648912666-thirty-svgrepo-com.svg",
-      "1712648914509-forty-svgrepo-com.svg",
-      "1712648914237-ninety-svgrepo-com.svg"
-    ]
-  }
 }
